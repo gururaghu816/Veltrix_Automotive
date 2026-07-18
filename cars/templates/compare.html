@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>Compare Cars</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+<center>
+<h1>Compare Cars</h1>
+<label>Select Car 1:</label>
+<select id="car1">
+    <option value="v8">V8 Phantom</option>
+    <option value="x9">Porsche</option>
+    <option value="verna">Hyundai Verna</option>
+    <option value="Defender">Land Rover Defender</option>
+</select>
+
+<label>Select Car 2:</label>
+<select id="car2">
+    <option value="v8">V8 Phantom</option>
+    <option value="x9">Porsche</option>
+    <option value="verna">Hyundai Verna</option>
+    <option value="Defender">Land Rover Defender</option>
+</select>
+<center>
+<br>
+<button onclick="compareCars()">Click Me</button>
+<br>
+<center>
+<br><br>
+<table border="1">
+<tr>
+<th>Feature</th>
+<th id="car1_name">Car 1</th>
+<th id="car2_name">Car 2</th>
+</tr>
+
+<tr>
+<td>Engine</td>
+<td id="engine1"></td>
+<td id="engine2"></td>
+</tr>
+
+<tr>
+<td>Top Speed</td>
+<td id="speed1"></td>
+<td id="speed2"></td>
+</tr>
+
+<tr>
+<td>Horsepower</td>
+<td id="hp1"></td>
+<td id="hp2"></td>
+</tr>
+
+</table>
+</center>
+<script>
+const cars = {
+    v8: {name: "V8 Phantom", engine: "V8", speed: "320 km/h", hp: "650 HP"},
+    x9: {name: "Porsche", engine: "V6", speed: "250 km/h", hp: "480 HP"},
+    verna: {name: "Hyundai Verna", engine: "1.5L", speed: "210 km/h", hp: "160 HP"}
+};
+
+function compareCars() {
+    let c1 = document.getElementById("car1").value;
+    let c2 = document.getElementById("car2").value;
+
+    document.getElementById("car1_name").innerText = cars[c1].name;
+    document.getElementById("car2_name").innerText = cars[c2].name;
+
+    document.getElementById("engine1").innerText = cars[c1].engine;
+    document.getElementById("engine2").innerText = cars[c2].engine;
+
+    document.getElementById("speed1").innerText = cars[c1].speed;
+    document.getElementById("speed2").innerText = cars[c2].speed;
+
+    document.getElementById("hp1").innerText = cars[c1].hp;
+    document.getElementById("hp2").innerText = cars[c2].hp;
+}
+</script>
+
+</body>
+</html>

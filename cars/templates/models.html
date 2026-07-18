@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Veltrix Models</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+<header>
+    <h2>VELTRIX</h2>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/models/">Models</a>
+        <a href="/compare/">Compare</a>
+        <a href="/about/">About</a>
+        <a href="/contact/">Contact</a>
+    </nav>
+</header>
+
+<h1 class="page-title">Our Models</h1>
+
+<div class="cars">
+
+    <div class="car-card">
+        <img src="{% static 'images/v8-phantom.jpg' %}">
+        <h3>V8 Phantom</h3>
+        <p>Luxuary</p>
+        <a href="{% url 'v8_phantom' %}" class="btn">View Details</a>
+    </div>
+
+    <div class="car-card">
+        <img src="{% static 'images/Porsche.jpg' %}">
+        <h3>Porsche</h3>
+        <p>Luxury SUV</p>
+        <a href="{% url 'x9_dominator' %}" class="btn">View Details</a>
+    </div>
+
+    <div class="car-card">
+        <img src="{% static 'images/hyundai-verna.jpg' %}">
+        <h3>Hyundai Verna</h3>
+        <p></p>
+        <a href="{% url 'hyundai_verna' %}" class="btn">View Details</a>
+    </div>
+    <div class="car-card">
+        <img src="{% static 'images/land-Rover-Defender.jpg' %}">
+        <h3>Land Rover Defender</h3>
+        <p></p>
+        <a href="{% url 'land_rover_defender' %}" class="btn">View Details</a>
+    </div>
+    
+</div>
+
+</body>
+</html>

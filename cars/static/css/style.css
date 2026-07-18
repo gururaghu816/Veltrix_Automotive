@@ -1,0 +1,151 @@
+body{
+font-family:Arial;
+margin:0;
+background:#111;
+color:white;
+}
+
+header{
+display:flex;
+justify-content:space-between;
+padding:20px;
+background:black;
+}
+
+nav a{
+color:white;
+margin:10px;
+text-decoration:none;
+}
+
+.hero {
+    position: relative;
+    height: 90vh;
+    background: url("../images/hyundai-verna.jpg") center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.hero-overlay{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+}
+
+.hero-content{
+position:relative;
+z-index:2;
+}
+
+.hero h1{
+font-size:60px;
+letter-spacing:3px;
+margin-bottom:20px;
+}
+
+.hero p{
+font-size:20px;
+margin-bottom:30px;
+color:#ccc;
+}
+
+.btn{
+background:red;
+color:white;
+padding:10px 20px;
+text-decoration:none;
+border:none;
+cursor:pointer;
+}
+
+
+.cars{
+display:flex;
+gap:30px;
+justify-content:center;
+padding:50px;
+}
+
+.car-card{
+background:#0a0a0a;
+padding:20px;
+text-align:center;
+}
+
+.car-card img{
+width:250px;
+}
+
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.7);
+}
+
+.modal-content{
+background:white;
+color:black;
+padding:20px;
+width:300px;
+margin:100px auto;
+}
+
+.close{
+cursor:pointer;
+font-size:20px;
+}
+
+.car-detail{
+text-align:center;
+padding:50px;
+}
+
+.car-detail img{
+width:600px;
+max-width:100%;
+margin:20px auto;
+display:block;
+border-radius:10px;
+}
+
+
+.hero-buttons{
+display:flex;
+gap:20px;
+justify-content:center;
+}
+
+.btn-primary{
+background:red;
+color:white;
+padding:14px 30px;
+text-decoration:none;
+font-weight:bold;
+transition:0.3s;
+}
+
+.btn-primary:hover{
+background:#cc0000;
+}
+
+.btn-secondary{
+border:2px solid white;
+color:white;
+padding:14px 30px;
+text-decoration:none;
+transition:0.3s;
+}
+
+.btn-secondary:hover{
+background:white;
+color:black;
+}
+

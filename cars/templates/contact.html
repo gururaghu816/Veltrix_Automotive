@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contact Veltrix</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+<header>
+    <h2>VELTRIX</h2>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/models/">Models</a>
+        <a href="/compare/">Compare</a>
+        <a href="/about/">About</a>
+        <a href="/contact/">Contact</a>
+    </nav>
+</header>
+
+<h1 class="page-title">Contact Veltrix</h1>
+
+<form class="contact-form" style="max-width:500px; margin:auto; text-align:center;">
+
+    <input type="text" placeholder="Your Name" required><br><br>
+
+    <input type="email" placeholder="Your Email" required><br><br>
+
+    <textarea placeholder="Message" rows="5" required></textarea><br><br>
+
+    <button class="btn">Send Message</button>
+
+</form>
+
+</body>
+</html>
