@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Veltrix Recommendations</title>
+</head>
+<body>
+
+    <h1>Recommended Cars</h1>
+
+    {% for car in cars %}
+
+        <h2>{{ car.name }}</h2>
+
+        <p><b>Brand:</b> {{ car.brand }}</p>
+        <p><b>Price:</b> ₹{{ car.price }} Lakhs</p>
+        <p><b>Mileage:</b> {{ car.mileage }} km/l</p>
+        <p><b>Fuel Type:</b> {{ car.fuel_type }}</p>
+        <p><b>Purpose:</b> {{ car.purpose }}</p>
+        <p><b>Seating Capacity:</b> {{ car.seating_capacity }}</p>
+        <p><b>Top Speed:</b> {{ car.top_speed }} km/h</p>
+
+        <hr>
+
+    {% empty %}
+
+        <h2>No Cars Found!</h2>
+
+    {% endfor %}
+
+</body>
+</html>

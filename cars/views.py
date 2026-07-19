@@ -22,7 +22,6 @@ def contact_page(request):
     return render(request, "contact.html")
 
 
-
 def get_cars(request):
     cars = list(Car.objects.values())
     return JsonResponse(cars, safe=False)
@@ -74,3 +73,28 @@ def book_test_drive(request):
         form = TestDriveForm()
 
     return render(request, 'book_test_drive.html', {'form': form})
+
+def recommend_car(request):
+
+    if request.method == "POST":
+
+        budget = request.POST.get('budget')
+        purpose = request.POST.get('purpose')
+        fuel_type = request.POST.get('fuel_type')
+
+        cars = Car.objects.filter(
+            price__lte=budget,
+            purpose=purpose,
+            fuel_type=fuel_type
+        )
+
+        return render(
+            request,
+            'recommend_result.html',
+            {'cars': cars}
+        )
+
+    return render(
+        request,
+        'recommend.html'
+    )

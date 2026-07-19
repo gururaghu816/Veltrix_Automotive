@@ -1,0 +1,16 @@
+name,brand,price,mileage,fuel_type,purpose,seating_capacity,top_speed
+Toyota Fortuner,Toyota,42.00,14.6,Diesel,Family,7,190
+Hyundai Verna,Hyundai,11.50,18.6,Petrol,Family,5,180
+Kia Seltos,Kia,18.00,17.0,Petrol,Family,5,170
+Mahindra XUV700,Mahindra,24.00,16.5,Diesel,Family,7,200
+Tata Safari,Tata,27.00,16.3,Diesel,Family,7,180
+BMW X3,BMW,75.00,13.0,Petrol,Luxury,5,235
+BMW X5,BMW,98.00,12.0,Petrol,Luxury,5,250
+Audi Q5,Audi,70.00,13.5,Petrol,Luxury,5,240
+Audi Q7,Audi,95.00,11.0,Petrol,Luxury,7,245
+Mercedes C-Class,Mercedes,65.00,15.0,Petrol,Luxury,5,245
+Tesla Model 3,Tesla,55.00,500,Electric,Daily Commute,5,225
+Tesla Model Y,Tesla,65.00,530,Electric,Family,7,217
+Porsche 911,Porsche,220.00,9.0,Petrol,Sports,2,308
+Lamborghini Huracan,Lamborghini,400.00,7.5,Petrol,Sports,2,325
+Ferrari Roma,Ferrari,380.00,8.0,Petrol,Sports,2,320
