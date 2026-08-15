@@ -4,10 +4,18 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .models import Car
 from .forms import TestDriveForm
-
+from django.shortcuts import redirect
 
 def home(request):
-    return render(request, "index.html")
+    if not request.user.is_authenticated:
+        return redirect('login')
+    cars = Car.objects.all()
+    form = TestDriveForm()
+
+    return render(request, 'index.html', {
+        'cars': cars,
+        'form': form
+    })
 
 def models_page(request):
     return render(request, "models.html")
@@ -61,18 +69,32 @@ def logout_view(request):
     return redirect('/login/')
 
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
+from .models import TestDrive
+
 def book_test_drive(request):
     if request.method == 'POST':
         form = TestDriveForm(request.POST)
         if form.is_valid():
-            form.save()
-            return render(request, 'success.html')
+            booking = form.save()
+            return render(request, 'success.html', {'booking': booking})
         else:
-            print(form.errors)  
+            print(form.errors)
     else:
         form = TestDriveForm()
 
     return render(request, 'book_test_drive.html', {'form': form})
+
+
+def save_signature(request, booking_id):
+    if request.method == "POST":
+        booking = get_object_or_404(TestDrive, id=booking_id)
+        booking.signature = request.POST.get("signature", "")
+        booking.signed = True
+        booking.save()
+        return JsonResponse({"status": "ok"})
+    return JsonResponse({"status": "error"}, status=400)
 
 def recommend_car(request):
 

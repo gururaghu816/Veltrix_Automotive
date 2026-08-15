@@ -13,28 +13,77 @@
     <h1>VELTRIX</h1>
     <h3>Login to your account</h3>
 
-    <form method="POST">
-        {% csrf_token %}
+<form method="POST">
+    {% csrf_token %}
 
-        <div class="input-box">
-            <label>Username</label>
-            <input type="text" name="username" required>
-        </div>
+    <div class="input-box">
+        <label>👤 Username</label>
+        <input type="text" name="username" required>
+    </div>
 
-        <div class="input-box">
-            <label>Password</label>
-            <input type="password" name="password" required>
-        </div>
+   <div class="input-box">
 
-        <button type="submit">Login</button>
+    <label>🔒 Password</label>
 
-        {% for message in messages %}
-            <p style="color:red;">{{ message }}</p>
-        {% endfor %}
+    <div class="password-box">
 
-    </form>
-</center>
+        <input
+            type="password"
+            id="password"
+            name="password"
+            required
+        >
+
+        <span class="toggle-password"
+              onclick="togglePassword()">
+            👁
+        </span>
+
+    </div>
+
 </div>
 
+<button type="submit">
+    LOGIN →
+</button>
+
+    {% for message in messages %}
+        <p class="error">{{ message }}</p>
+    {% endfor %}
+
+</form>
+
+<div class="login-footer">
+    <p>Luxury. Performance. Innovation.</p>
+    <br>
+    <a href="/">← Back to Veltrix</a>
+</div>
+</center>
+</div>
+</div>
+</center>
+
+<script>
+
+function togglePassword(){
+
+    var password = document.getElementById("password");
+
+    if(password.type === "password"){
+
+        password.type = "text";
+
+    }else{
+
+        password.type = "password";
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
 </body>
 </html>

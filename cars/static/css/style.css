@@ -149,3 +149,173 @@ background:white;
 color:black;
 }
 
+
+.account .logout-btn{
+    display:inline-block;
+    background:#ff3b30 !important;
+    color:#ffffff !important;
+    text-decoration:none !important;
+    padding:10px 22px;
+    border-radius:30px;
+    font-weight:bold;
+    transition:0.3s;
+}
+
+.account .logout-btn:hover{
+    background:#d32f2f !important;
+    color:#ffffff !important;
+}
+
+/* ===========================
+   BOOK TEST DRIVE POPUP
+=========================== */
+
+.booking-modal{
+    display:none;
+    position:fixed;
+    z-index:2000;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.75);
+    backdrop-filter:blur(6px);
+
+    justify-content:center;
+    align-items:center;
+}
+
+.booking-content{
+
+    position:relative;
+
+    width:420px;
+    max-width:90%;
+
+    padding:35px;
+
+    background:#151515;
+
+    border:1px solid rgba(255,255,255,0.15);
+
+    border-radius:18px;
+
+    box-shadow:0 20px 50px rgba(0,0,0,0.7);
+
+    color:white;
+}
+
+.booking-content h2{
+
+    text-align:center;
+
+    font-size:30px;
+
+    margin-bottom:8px;
+}
+
+.booking-content p{
+
+    text-align:center;
+
+    color:#aaa;
+
+    margin-bottom:25px;
+}
+
+.booking-close{
+
+    position:absolute;
+
+    top:12px;
+    right:18px;
+
+    font-size:30px;
+
+    color:#aaa;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.booking-close:hover{
+
+    color:red;
+
+}
+
+.booking-field{
+
+    margin-bottom:18px;
+}
+
+.booking-field label{
+
+    display:block;
+
+    margin-bottom:7px;
+
+    color:#ddd;
+
+}
+
+.booking-field input,
+.booking-field select{
+
+    width:100%;
+
+    padding:12px;
+
+    box-sizing:border-box;
+
+    background:#222;
+
+    border:1px solid #444;
+
+    border-radius:8px;
+
+    color:white;
+
+    font-size:15px;
+}
+
+.booking-field input:focus,
+.booking-field select:focus{
+
+    outline:none;
+
+    border-color:#d81f26;
+
+}
+
+.booking-submit{
+
+    width:100%;
+
+    padding:13px;
+
+    margin-top:8px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:#d81f26;
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.booking-submit:hover{
+
+    background:#b90d13;
+
+}

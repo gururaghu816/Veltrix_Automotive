@@ -215,8 +215,10 @@
 
                 <div class="form-grid">
                     <div class="field">
-                        <label for="budget">Budget (Lakhs)</label>
-                        <input type="number" id="budget" name="budget" required placeholder="Enter your budget">
+                        <label for="budget_display">Budget</label>
+                        <input type="text" id="budget_display" placeholder="e.g. 20 lakhs or 1.5 crore" autocomplete="off" required>
+                        <input type="hidden" name="budget" id="budget_hidden">
+                        <div class="hint" id="budget_hint"></div>
                     </div>
 
                     <div class="field">
@@ -252,5 +254,57 @@
             <a href="#">LinkedIn</a>
         </div>
     </footer>
+<script>
+  const budgetDisplay = document.getElementById('budget_display');
+  const budgetHidden = document.getElementById('budget_hidden');
+  const budgetHint = document.getElementById('budget_hint');
+  const form = budgetDisplay.closest('form');
+
+  function parseBudget(text) {
+    if (!text) return null;
+    text = text.trim().toLowerCase();
+
+    // Extract the number (supports decimals like 1.5)
+    const numberMatch = text.match(/[\d.]+/);
+    if (!numberMatch) return null;
+    const number = parseFloat(numberMatch[0]);
+    if (isNaN(number)) return null;
+
+    // Detect unit
+    if (text.includes('crore') || text.includes('cr')) {
+      return number * 100; // 1 crore = 100 lakhs
+    }
+    if (text.includes('lakh') || text.includes('l')) {
+      return number; // already in lakhs
+    }
+    // No unit given — assume lakhs by default
+    return number;
+  }
+
+  form.addEventListener('submit', function(e) {
+    const parsed = parseBudget(budgetDisplay.value);
+    if (parsed === null || parsed <= 0) {
+      e.preventDefault();
+      budgetHint.textContent = 'Please enter a valid amount, e.g. "20 lakhs" or "1.5 crore"';
+      budgetHint.style.color = '#ff4433';
+      budgetDisplay.focus();
+      return;
+    }
+    budgetHidden.value = parsed;
+  });
+
+  // Live preview as they type, so they can see it's understood correctly
+  budgetDisplay.addEventListener('input', function() {
+    const parsed = parseBudget(budgetDisplay.value);
+    if (parsed !== null && parsed > 0) {
+      budgetHint.textContent = `Understood as ₹${parsed.toLocaleString('en-IN')} Lakhs`;
+      budgetHint.style.color = '';
+    } else {
+      budgetHint.textContent = 'Type an amount like "20 lakhs" or "1.5 crore"';
+      budgetHint.style.color = '';
+    }
+  });
+</script>
 </body>
+
 </html>

@@ -2,72 +2,215 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Veltrix Automotive</title>
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veltrix Automotive</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
-
 <body>
 
-<header>
-<h2>VELTRIX</h2>
-<nav>
-    <a href="/">Home</a>
-    <a href="/models/">Models</a>
-    <a href="/compare/">Compare</a>
-    <a href="/about/">About</a>
-    <a href="/contact/">Contact</a>
-</nav>
-</header>
+    <!-- ================= NAVBAR ================= -->
 
-<section class="hero">
+    <header class="navbar">
 
-<div class="hero-overlay"></div>
+        <div class="logo">
+            <h2>VELTRIX</h2>
+        </div>
 
-<div class="hero-content">
-<h1>VELTRIX AUTOMOTIVE</h1>
-<h2>DRIVE FUTURE</h2>
+        <nav class="nav-links">
+            <a href="/">Home</a>
+            <a href="/models/">Models</a>
+            <a href="/compare/">Compare</a>
+            <a href="/about/">About</a>
+            <a href="/contact/">Contact</a>
+        </nav>
+
+        <div class="account">
+
+            {% if user.is_authenticated %}
+
+                <a href="{% url 'logout' %}" class="logout-btn">
+                    Logout
+                </a>
+
+            {% else %}
+
+                <a href="{% url 'login' %}" class="login-btn">
+                    Login
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </header>
+
+    <!-- ================= HERO SECTION ================= -->
+
+    <section class="hero">
+
+        <div class="hero-overlay"></div>
+
+        <div class="hero-content">
+
+            <h1>VELTRIX AUTOMOTIVE</h1>
+
+            <h2>DRIVE FUTURE</h2>
+
+        </div>
+
+    </section>
+
+    <!-- ================= FEATURED CARS ================= -->
+
+    <section class="featured">
+
+        <h2 style="text-align:center;">Featured Models</h2>
+
+        <div class="cars">
+
+            <div class="car-card">
+
+                <img src="{% static 'images/v8-phantom.jpg' %}" alt="V8 Phantom">
+
+                <h3>V8 Phantom</h3>
+
+            </div>
+
+            <div class="car-card">
+
+                <img src="{% static 'images/Porsche.jpg' %}" alt="Porsche">
+
+                <h3>Porsche</h3>
+
+            </div>
+
+            <div class="car-card">
+
+                <img src="{% static 'images/hyundai-verna.jpg' %}" alt="Hyundai Verna">
+
+                <h3>Hyundai Verna</h3>
+
+            </div>
+
+            <div class="car-card">
+
+                <img src="{% static 'images/land-Rover-Defender.jpg' %}" alt="Land Rover Defender">
+
+                <h3>Land Rover Defender</h3>
+
+            </div>
+
+        </div>
+
+        <center>
+
+            <a href="{% url 'recommend_car' %}" class="btn-primary">
+                Explore Recommendations
+            </a>
+
+        </center>
+
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <p>© 2026 Veltrix Automotive. All Rights Reserved.</p>
+
+    </footer>
+<!-- ================= BOOK TEST DRIVE POPUP ================= -->
+
+<div id="bookingModal" class="booking-modal">
+
+    <div class="booking-content">
+
+        <span class="booking-close" onclick="closeBooking()">&times;</span>
+
+        <h2>Book Test Drive</h2>
+
+        <p>Experience your dream car with Veltrix Automotive.</p>
+
+        <form method="POST" action="{% url 'book_test_drive' %}">
+
+            {% csrf_token %}
+
+            <div class="booking-field">
+                <label>Name</label>
+                <input type="text" name="name" required>
+            </div>
+
+            <div class="booking-field">
+                <label>Email</label>
+                <input type="email" name="email" required>
+            </div>
+
+            <div class="booking-field">
+                <label>Phone</label>
+                <input type="text" name="phone" required>
+            </div>
+
+            <div class="booking-field">
+                <label>Select Car</label>
+
+                <select name="car" required>
+
+                    <option value="">Select a car</option>
+
+                    {% for car in cars %}
+
+                        <option value="{{ car.id }}">
+                            {{ car.name }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+            <div class="booking-field">
+                <label>Preferred Date</label>
+                <input type="date" name="date" required>
+            </div>
+
+            <button type="submit" class="booking-submit">
+                Book Test Drive
+            </button>
+
+        </form>
+
+    </div>
 
 </div>
+<script>
 
-</section>
+function openBooking(){
 
-<section class="featured">
-<h2><center>Featured Models</center></h2>
+    document.getElementById("bookingModal").style.display = "flex";
 
-<div class="cars">
+}
 
-<div class="car-card">
-<img src="{% static 'images/v8-phantom.jpg' %}">
-<h3>V8 Phantom</h3>
-</div>
+function closeBooking(){
 
-<div class="car-card">
-<img src="{% static 'images/Porsche.jpg' %}">
-<h3>Porsche</h3>
-</div>
+    document.getElementById("bookingModal").style.display = "none";
 
-<div class="car-card">
-<img src="{% static 'images/hyundai-verna.jpg' %}">
-<h3>Hyundai Verna</h3>
-</div>
-<div class="car-card">
-<img src="{% static 'images/land-Rover-Defender.jpg' %}">
-<h3> Land Rover Defender</h3>
-</div>
+}
 
-</div>
+window.onclick = function(event){
 
-<a href="/recommend/" class="hero-btn">
-    Explore Recommendations
-</a>
-</section>
+    var modal = document.getElementById("bookingModal");
 
-<footer>
-<p> 2026 Veltrix Automotive</p>
-</footer>
+    if(event.target === modal){
 
-<script src="js/script.js"></script>
+        modal.style.display = "none";
+
+    }
+
+}
+
+</script>
 </body>
+
 </html>

@@ -1,6 +1,502 @@
-<center>
-<h2>Booking Successful </h2>
-<button onclick="GoHome()" class="btn-glow">
-<a href="/">Go Home</a>
-</button>
-</center>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Vehicle Handover — Veltrix</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Dancing+Script:wght@600;700&family=Caveat:wght@600;700&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a0a;
+    --bg-2:#141414;
+    --card:#161616;
+    --line:#2a2a2a;
+    --text:#f5f5f5;
+    --muted:#9a9a9a;
+    --accent:#ff4433;
+    --accent-glow:rgba(255,68,51,0.35);
+    --ok:#3ddc84;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+  }
+
+  .navbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:22px 48px;background:#000;border-bottom:1px solid #1a1a1a;
+  }
+  .navbar .logo{font-family:'Poppins',sans-serif;font-weight:800;font-size:22px;letter-spacing:0.04em;}
+  .navbar .nav-links{display:flex;gap:34px;}
+  .navbar .nav-links a{color:#e8e8e8;text-decoration:none;font-size:15px;}
+  .navbar .nav-links a:hover{color:var(--accent);}
+  .navbar .btn-logout{background:var(--accent);color:#0a0a0a;padding:10px 22px;border-radius:999px;font-weight:700;text-decoration:none;font-size:14px;}
+  @media (max-width:760px){ .navbar .nav-links{display:none;} }
+
+  .stage{
+    min-height:calc(100vh - 73px);
+    display:flex;align-items:center;justify-content:center;
+    padding:56px 20px;
+    background:radial-gradient(ellipse 900px 480px at 50% 10%, var(--accent-glow) 0%, transparent 60%), var(--bg);
+  }
+
+  .content-col{ display:flex; flex-direction:column; align-items:center; width:100%; }
+
+  .ignition{ position:relative; width:80px; height:80px; margin:0 auto 20px; }
+  .ignition .ring{ position:absolute; inset:0; border-radius:50%; border:1.5px solid var(--accent); opacity:0; animation:pulse 1.8s ease-out infinite; }
+  .ignition .ring.r2{ animation-delay:.5s; }
+  .ignition .ring.r3{ animation-delay:1s; }
+  @keyframes pulse{ 0%{transform:scale(0.55);opacity:.9;} 100%{transform:scale(1.5);opacity:0;} }
+  .ignition .core{ position:absolute; inset:12px; border-radius:50%; background:var(--accent); display:flex; align-items:center; justify-content:center; box-shadow:0 0 30px var(--accent-glow); }
+  .ignition svg{ width:26px; height:26px; }
+  .ignition path{ stroke:#0a0a0a; stroke-width:3; fill:none; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:28; stroke-dashoffset:28; animation:draw .5s ease forwards .9s; }
+  @keyframes draw{ to{stroke-dashoffset:0;} }
+
+  .headline-wrap{ text-align:center; margin-bottom:34px; }
+  .eyebrow{ font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.24em; text-transform:uppercase; color:var(--accent); margin:0 0 12px; }
+  h1{ font-family:'Poppins',sans-serif; font-weight:800; font-size:clamp(28px,4.6vw,42px); text-transform:uppercase; margin:0 0 10px; line-height:1.08; }
+  .headline-wrap p{ color:var(--muted); font-size:14.5px; max-width:440px; margin:0 auto; line-height:1.6; }
+
+  .slip{
+    position:relative;
+    width:100%; max-width:520px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:0 30px 70px -20px rgba(0,0,0,0.7);
+  }
+  .slip-top{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 24px;
+    background:var(--bg-2);
+    border-bottom:1px solid var(--line);
+  }
+  .slip-top .tag{ display:flex; align-items:center; gap:8px; font-family:'Poppins',sans-serif; font-weight:800; font-size:13px; letter-spacing:0.05em; }
+  .slip-top .tag .dot{ width:7px;height:7px;border-radius:50%;background:var(--ok); box-shadow:0 0 8px var(--ok); }
+  .slip-top .ref{ font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--muted); }
+  .slip-top .ref b{ color:var(--accent); }
+
+  .plate-strip{
+    display:flex; align-items:center; justify-content:space-between;
+    margin:20px 24px 0;
+    background:#f2c40c;
+    border-radius:6px;
+    padding:10px 16px;
+  }
+  .plate-strip .plate-no{ font-family:'JetBrains Mono',monospace; font-weight:700; font-size:19px; letter-spacing:0.08em; color:#141414; }
+  .plate-strip .plate-lbl{ font-family:'Inter',sans-serif; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:#3a3a3a; font-weight:600; }
+
+  .slip-body{ padding:22px 24px 4px; }
+
+  .vehicle-row{ display:flex; align-items:center; gap:14px; padding-bottom:18px; margin-bottom:18px; border-bottom:1px dashed var(--line); }
+  .vehicle-thumb{ width:56px;height:56px;border-radius:10px; background:linear-gradient(160deg,#2a2a2a,#151515); display:flex;align-items:center;justify-content:center; flex-shrink:0;border:1px solid var(--line); }
+  .vehicle-thumb svg{ width:32px;height:32px; color:var(--accent); }
+  .vehicle-info .model{ font-family:'Poppins',sans-serif; font-weight:700; font-size:16px; }
+  .vehicle-info .vin{ font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--muted); margin-top:3px; }
+
+  .grid{ display:grid; grid-template-columns:1fr 1fr; gap:18px 16px; margin-bottom:20px; }
+  .grid .item{ display:flex; flex-direction:column; gap:5px; }
+  .grid .item.full{ grid-column:1/-1; }
+  .grid label{ font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.13em; text-transform:uppercase; color:var(--muted); }
+  .grid .val{ font-size:14.5px; font-weight:600; }
+  .grid .val.accent{ color:var(--accent); }
+
+  .meter-row{ display:flex; align-items:center; justify-content:space-between; background:var(--bg-2); border:1px solid var(--line); border-radius:12px; padding:16px 18px; margin-bottom:20px; }
+  .odometer{ display:flex; flex-direction:column; gap:6px; }
+  .odometer label{ font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); }
+  .odo-digits{ display:flex; gap:3px; }
+  .odo-digits span{ font-family:'JetBrains Mono',monospace; background:#0a0a0a; border:1px solid var(--line); border-radius:4px; width:22px; height:30px; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:600; color:var(--text); }
+  .odo-digits span.unit{ background:transparent; border:none; color:var(--muted); font-size:11px; width:auto; }
+
+  .fuel{ display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .fuel label{ font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); }
+  .fuel-gauge{ width:74px; height:44px; }
+
+  .notice{ display:flex; gap:10px; background:rgba(255,68,51,0.06); border:1px solid rgba(255,68,51,0.25); border-radius:10px; padding:12px 14px; margin-bottom:22px; }
+  .notice svg{ width:16px;height:16px;flex-shrink:0;color:var(--accent);margin-top:2px; }
+  .notice p{ margin:0; font-size:12px; line-height:1.55; color:var(--muted); }
+  .notice b{ color:var(--text); }
+
+  /* ---- Signature block ---- */
+  .sign-block{ margin-bottom:24px; }
+  .sign-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+  .sign-head label{ font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.13em; text-transform:uppercase; color:var(--muted); }
+
+  .sign-tabs{ display:flex; gap:8px; margin-bottom:14px; }
+  .tab-btn{
+    flex:1; padding:9px 12px; border-radius:8px; border:1px solid var(--line);
+    background:var(--bg-2); color:var(--muted); font-family:'Inter',sans-serif;
+    font-size:12.5px; font-weight:600; cursor:pointer; transition:all .15s ease;
+  }
+  .tab-btn.active{ background:var(--accent); border-color:var(--accent); color:#0a0a0a; }
+
+  .sign-panel{ display:block; }
+
+  .type-input{
+    width:100%; background:var(--bg-2); border:1px solid var(--line); border-radius:8px;
+    padding:12px 14px; color:var(--text); font-family:'Inter',sans-serif; font-size:14px;
+    outline:none; margin-bottom:12px; transition:border-color .15s ease;
+  }
+  .type-input:focus{ border-color:var(--accent); }
+
+  .font-chips{ display:flex; gap:8px; margin-bottom:14px; }
+  .chip{
+    padding:7px 14px; border-radius:999px; border:1px solid var(--line);
+    background:transparent; color:var(--muted); font-size:12px; cursor:pointer;
+    transition:all .15s ease;
+  }
+  .chip.active{ border-color:var(--accent); color:var(--accent); }
+
+  .type-preview{
+    border:1px dashed var(--line); border-radius:10px; background:var(--bg-2);
+    min-height:90px; display:flex; align-items:center; justify-content:center;
+    padding:10px 16px; color:#4a4a4a; font-size:34px; text-align:center;
+    overflow:hidden; word-break:break-word;
+  }
+  .type-preview.filled{ color:var(--text); }
+
+  .sign-pad-wrap{ position:relative; border:1px dashed var(--line); border-radius:10px; background:var(--bg-2); margin-bottom:10px; }
+  canvas#sigPad{ width:100%; height:110px; display:block; border-radius:10px; touch-action:none; cursor:crosshair; }
+  .sign-hint{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; text-align:center; padding:0 20px; font-family:'JetBrains Mono',monospace; font-size:11px; color:#4a4a4a; pointer-events:none; }
+  .sign-baseline{ position:absolute; left:20px; right:20px; bottom:26px; height:1px; background:var(--line); pointer-events:none; }
+  .sign-clear{ background:none;border:none;color:var(--accent);font-size:11.5px;font-family:'Inter',sans-serif;cursor:pointer;text-decoration:underline; }
+
+  .sign-status{ margin-top:10px; font-size:11.5px; color:var(--muted); display:flex; align-items:center; gap:6px; }
+  .sign-status .dot{ width:6px;height:6px;border-radius:50%;background:var(--line); transition:background .2s; }
+  .sign-status.signed .dot{ background:var(--ok); box-shadow:0 0 6px var(--ok); }
+  .sign-status.signed{ color:var(--ok); }
+
+  .actions{ display:flex; gap:12px; margin-top:26px; max-width:520px; width:100%; }
+  .btn{ flex:1; text-align:center; padding:14px 18px; border-radius:999px; font-weight:600; font-size:14px; text-decoration:none; cursor:pointer; border:1.5px solid transparent; transition:transform .12s ease, background .18s ease, border-color .18s ease, opacity .18s ease; }
+  .btn-primary{ background:var(--accent); color:#0a0a0a; }
+  .btn-primary:hover{ background:#ff5c47; }
+  .btn-primary:disabled{ opacity:.4; cursor:not-allowed; }
+  .btn-ghost{ background:transparent; border-color:var(--line); color:var(--text); }
+  .btn-ghost:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn:active{ transform:scale(0.97); }
+
+  @media (max-width:480px){ .grid{ grid-template-columns:1fr; } .meter-row{ flex-direction:column; gap:18px; align-items:stretch; } }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="logo">VELTRIX</div>
+  <div class="nav-links">
+    <a href="{% url 'home' %}">Home</a>
+    <a href="{% url 'models' %}">Models</a>
+    <a href="{% url 'compare' %}">Compare</a>
+    <a href="{% url 'about' %}">About</a>
+    <a href="{% url 'contact' %}">Contact</a>
+  </div>
+  <a href="{% url 'logout' %}" class="btn-logout">Logout</a>
+</nav>
+
+<div class="stage">
+  <div class="content-col">
+
+    <div class="ignition">
+      <div class="ring"></div><div class="ring r2"></div><div class="ring r3"></div>
+      <div class="core"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></div>
+    </div>
+
+    <div class="headline-wrap">
+      <p class="eyebrow">Vehicle Assigned</p>
+      <h1>This {{ booking.car.name }} is<br>yours for the drive.</h1>
+      <p>We've set aside this exact unit for your slot. Confirm the handover details below and sign to release the keys.</p>
+    </div>
+
+    <div class="slip">
+      <div class="slip-top">
+        <span class="tag"><span class="dot"></span>Handover Slip</span>
+        <span class="ref">REF <b id="refCode">VX-{{ booking.id|stringformat:"05d" }}</b></span>
+      </div>
+
+      <div class="plate-strip">
+        <span class="plate-no">{{ booking.car.plate_number|default:"Not assigned" }}</span>
+        <span class="plate-lbl">Registration</span>
+      </div>
+
+      <div class="slip-body">
+        <div class="vehicle-row">
+          <div class="vehicle-thumb">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 13l1.5-4.5A2 2 0 0 1 6.4 7h11.2a2 2 0 0 1 1.9 1.5L21 13"/><rect x="2" y="13" width="20" height="5" rx="1.5"/><circle cx="6.5" cy="18.5" r="1.5"/><circle cx="17.5" cy="18.5" r="1.5"/></svg>
+          </div>
+          <div class="vehicle-info">
+            <div class="model">{{ booking.car.brand }} {{ booking.car.name }} · {{ booking.car.color|default:"Standard" }}</div>
+            <div class="vin">VIN •••• •••• {{ booking.car.vin|slice:"-4:"|default:"----" }}</div>
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="item">
+            <label>Assigned to</label>
+            <span class="val">{{ booking.name }}</span>
+          </div>
+          <div class="item">
+            <label>Contact</label>
+            <span class="val">{{ booking.phone }}</span>
+          </div>
+          <div class="item">
+            <label>Drive window</label>
+            <span class="val accent">{{ booking.date|date:"D, d M" }} · {{ booking.time_slot }}</span>
+          </div>
+          <div class="item">
+            <label>Sales advisor</label>
+            <span class="val">{{ booking.advisor }}</span>
+          </div>
+          <div class="item full">
+            <label>Pickup point</label>
+            <span class="val">Veltrix Showroom — Mangaluru</span>
+          </div>
+        </div>
+
+        <div class="meter-row">
+          <div class="odometer">
+            <label>Odometer at handover</label>
+            <div class="odo-digits">
+              {% for digit in booking.car.odometer|stringformat:"06d" %}<span>{{ digit }}</span>{% endfor %}
+              <span class="unit">km</span>
+            </div>
+          </div>
+          <div class="fuel">
+            <label>Fuel level</label>
+            <svg class="fuel-gauge" viewBox="0 0 74 44" id="fuelGauge" data-fuel="{{ booking.car.fuel_level }}">
+              <path d="M6 38 A31 31 0 0 1 68 38" fill="none" stroke="#2a2a2a" stroke-width="7" stroke-linecap="round"/>
+              <path id="fuelArc" d="M6 38 A31 31 0 0 1 68 38" fill="none" stroke="#ff4433" stroke-width="7" stroke-linecap="round"/>
+              <text id="fuelText" x="37" y="34" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#f5f5f5" font-weight="600"></text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="notice">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L14.7 3.86a2 2 0 0 0-3.4 0z"/></svg>
+          <p><b>Comprehensive insurance</b> is active for the full drive window. You're responsible for the vehicle from handover until it's returned to the same advisor.</p>
+        </div>
+
+        <div class="sign-block">
+          <div class="sign-head">
+            <label>Sign to acknowledge &amp; release keys</label>
+          </div>
+
+          <div class="sign-tabs">
+            <button type="button" class="tab-btn active" data-tab="type">Type signature</button>
+            <button type="button" class="tab-btn" data-tab="draw">Draw signature</button>
+          </div>
+
+          <div class="sign-panel" id="typePanel">
+            <input type="text" id="typedName" class="type-input" placeholder="Type your full name" value="{{ booking.name }}">
+            <div class="font-chips">
+              <button type="button" class="chip active" data-font="'Dancing Script', cursive">Style 1</button>
+              <button type="button" class="chip" data-font="'Caveat', cursive">Style 2</button>
+              <button type="button" class="chip" data-font="'Pacifico', cursive">Style 3</button>
+            </div>
+            <div class="type-preview" id="typePreview">Your signature preview</div>
+          </div>
+
+          <div class="sign-panel" id="drawPanel" style="display:none;">
+            <div class="sign-pad-wrap">
+              <canvas id="sigPad"></canvas>
+              <div class="sign-baseline"></div>
+              <div class="sign-hint" id="sigHint">Works best on a touchscreen or trackpad — draw with your finger or stylus</div>
+            </div>
+            <button type="button" class="sign-clear" id="clearSig">Clear drawing</button>
+          </div>
+
+          <div class="sign-status" id="sigStatus"><span class="dot"></span><span id="sigStatusText">Awaiting signature</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a href="{% url 'home' %}" class="btn btn-ghost">Back to home</a>
+      <button type="button" class="btn btn-primary" id="releaseBtn" disabled>Release keys</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // ---- Fuel gauge ----
+  const fuelGauge = document.getElementById('fuelGauge');
+  const fuelPct = parseInt(fuelGauge.dataset.fuel, 10) || 0;
+  const ARC = 97.4;
+  document.getElementById('fuelArc').style.strokeDasharray = ARC;
+  document.getElementById('fuelArc').style.strokeDashoffset = ARC - (ARC * fuelPct / 100);
+  document.getElementById('fuelText').textContent = fuelPct + '%';
+
+  // ---- Shared state + status (declared FIRST so nothing below breaks) ----
+  const statusEl = document.getElementById('sigStatus');
+  const statusText = document.getElementById('sigStatusText');
+  const releaseBtn = document.getElementById('releaseBtn');
+  let activeMethod = 'type';
+  let hasDrawing = false;
+
+  function evaluateSignatureState(){
+    const typedEl = document.getElementById('typedName');
+    const signed = (activeMethod === 'type' && typedEl && typedEl.value.trim().length >= 2)
+                || (activeMethod === 'draw' && hasDrawing);
+    statusEl.classList.toggle('signed', signed);
+    statusText.textContent = signed ? 'Signed — ready to release' : 'Awaiting signature';
+    releaseBtn.disabled = !signed;
+  }
+
+  // ---- Tab switching ----
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const typePanel = document.getElementById('typePanel');
+  const drawPanel = document.getElementById('drawPanel');
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeMethod = btn.dataset.tab;
+      typePanel.style.display = activeMethod === 'type' ? 'block' : 'none';
+      drawPanel.style.display = activeMethod === 'draw' ? 'block' : 'none';
+      evaluateSignatureState();
+    });
+  });
+
+  if ('ontouchstart' in window) {
+    document.querySelector('[data-tab="draw"]').click();
+  }
+
+  // ---- Type-to-sign ----
+  const typedName = document.getElementById('typedName');
+  const typePreview = document.getElementById('typePreview');
+  const fontChips = document.querySelectorAll('.chip');
+  let selectedFont = "'Dancing Script', cursive";
+
+  function updateTypePreview(){
+    const val = typedName.value.trim();
+    if(val){
+      typePreview.textContent = val;
+      typePreview.style.fontFamily = selectedFont;
+      typePreview.classList.add('filled');
+    } else {
+      typePreview.textContent = 'Your signature preview';
+      typePreview.style.fontFamily = "'Inter', sans-serif";
+      typePreview.classList.remove('filled');
+    }
+    evaluateSignatureState();
+  }
+  typedName.addEventListener('input', updateTypePreview);
+
+  fontChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      fontChips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      selectedFont = chip.dataset.font;
+      updateTypePreview();
+    });
+  });
+  updateTypePreview();
+
+  // ---- Draw-to-sign ----
+  const canvas = document.getElementById('sigPad');
+  const ctx = canvas.getContext('2d');
+  let drawing = false;
+
+  function resizeCanvas(){
+    const rect = canvas.getBoundingClientRect();
+    const ratio = window.devicePixelRatio || 1;
+    canvas.width = rect.width * ratio;
+    canvas.height = rect.height * ratio;
+    ctx.scale(ratio, ratio);
+    ctx.strokeStyle = '#f5f5f5';
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  function getPos(e){
+    const rect = canvas.getBoundingClientRect();
+    const point = e.touches ? e.touches[0] : e;
+    return { x: point.clientX - rect.left, y: point.clientY - rect.top };
+  }
+  function start(e){
+    e.preventDefault();
+    drawing = true;
+    document.getElementById('sigHint').style.display = 'none';
+    const p = getPos(e);
+    ctx.beginPath();
+    ctx.moveTo(p.x, p.y);
+  }
+  function move(e){
+    if(!drawing) return;
+    e.preventDefault();
+    const p = getPos(e);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+    hasDrawing = true;
+    evaluateSignatureState();
+  }
+  function end(){ drawing = false; }
+
+  canvas.addEventListener('mousedown', start);
+  canvas.addEventListener('mousemove', move);
+  window.addEventListener('mouseup', end);
+  canvas.addEventListener('touchstart', start, {passive:false});
+  canvas.addEventListener('touchmove', move, {passive:false});
+  canvas.addEventListener('touchend', end);
+
+  document.getElementById('clearSig').addEventListener('click', () => {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    hasDrawing = false;
+    document.getElementById('sigHint').style.display = 'flex';
+    evaluateSignatureState();
+  });
+
+  // ---- Initial state check (runs after everything above is defined) ----
+  evaluateSignatureState();
+
+  // ---- Release keys ----
+  function getSignatureImage(){
+    if(activeMethod === 'draw'){
+      return canvas.toDataURL();
+    }
+    const off = document.createElement('canvas');
+    off.width = 600; off.height = 200;
+    const octx = off.getContext('2d');
+    octx.fillStyle = '#161616';
+    octx.fillRect(0,0,off.width,off.height);
+    octx.fillStyle = '#f5f5f5';
+    octx.font = `56px ${selectedFont}`;
+    octx.textAlign = 'center';
+    octx.textBaseline = 'middle';
+    octx.fillText(typedName.value.trim(), off.width/2, off.height/2);
+    return off.toDataURL();
+  }
+
+  releaseBtn.addEventListener('click', () => {
+    fetch("{% url 'save_signature' booking.id %}", {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": "{{ csrf_token }}",
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: "signature=" + encodeURIComponent(getSignatureImage())
+           + "&method=" + activeMethod
+    }).then(response => response.json())
+      .then(() => {
+        releaseBtn.textContent = 'Keys released ✓';
+        releaseBtn.style.background = '#3ddc84';
+        releaseBtn.disabled = true;
+      })
+      .catch(() => {
+        releaseBtn.textContent = 'Error — try again';
+      });
+  });
+</script>
+
+</body>
+</html>

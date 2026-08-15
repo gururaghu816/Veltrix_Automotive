@@ -1,31 +1,179 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Veltrix Recommendations</title>
+<meta charset="UTF-8">
+<title>Recommended For You — Veltrix</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a0a; --bg-2:#141414; --card:#161616; --line:#2a2a2a;
+    --text:#f5f5f5; --muted:#9a9a9a; --accent:#ff4433; --accent-glow:rgba(255,68,51,0.35);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{ background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; min-height:100vh; }
+
+  .navbar{ display:flex;align-items:center;justify-content:space-between; padding:22px 48px;background:#000;border-bottom:1px solid #1a1a1a; }
+  .navbar .logo{ font-family:'Poppins',sans-serif;font-weight:800;font-size:22px;letter-spacing:0.04em; }
+  .navbar .nav-links{ display:flex;gap:34px; }
+  .navbar .nav-links a{ color:#e8e8e8;text-decoration:none;font-size:15px; }
+  .navbar .nav-links a:hover{ color:var(--accent); }
+  .navbar .btn-logout{ background:var(--accent);color:#0a0a0a;padding:10px 22px;border-radius:999px;font-weight:700;text-decoration:none;font-size:14px; }
+  @media (max-width:760px){ .navbar .nav-links{display:none;} }
+
+  .page{
+    padding:56px 48px 80px;
+    background:radial-gradient(ellipse 900px 420px at 50% 0%, var(--accent-glow) 0%, transparent 60%), var(--bg);
+    min-height:calc(100vh - 73px);
+  }
+
+  .header{ text-align:center; max-width:560px; margin:0 auto 44px; }
+  .eyebrow{ font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.24em; text-transform:uppercase; color:var(--accent); margin:0 0 12px; }
+  h1{ font-family:'Poppins',sans-serif; font-weight:800; font-size:clamp(26px,4.2vw,38px); text-transform:uppercase; margin:0 0 10px; line-height:1.1; }
+  .header p{ color:var(--muted); font-size:14.5px; margin:0; line-height:1.6; }
+
+  .empty{
+    max-width:440px; margin:60px auto; text-align:center;
+    background:var(--card); border:1px solid var(--line); border-radius:16px; padding:40px 30px;
+  }
+  .empty svg{ width:44px;height:44px;color:var(--accent);margin-bottom:16px; }
+  .empty h3{ font-family:'Poppins',sans-serif; font-weight:700; font-size:18px; margin:0 0 8px; }
+  .empty p{ color:var(--muted); font-size:14px; margin:0 0 24px; line-height:1.6; }
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
+    gap:24px;
+    max-width:1200px;
+    margin:0 auto;
+  }
+
+  .car-card{
+    background:var(--card); border:1px solid var(--line); border-radius:16px;
+    overflow:hidden; display:flex; flex-direction:column;
+    transition:transform .18s ease, border-color .18s ease;
+  }
+  .car-card:hover{ transform:translateY(-4px); border-color:#3a3a3a; }
+
+  .car-visual{
+    position:relative; height:150px;
+    background:
+      radial-gradient(circle at 30% 20%, rgba(255,68,51,0.12), transparent 60%),
+      linear-gradient(160deg,#232323,#101010);
+    display:flex; align-items:center; justify-content:center;
+    border-bottom:1px solid var(--line);
+  }
+  .car-visual svg{ width:88px; height:88px; color:var(--accent); opacity:0.9; }
+  .fuel-badge{
+    position:absolute; top:14px; right:14px;
+    background:rgba(0,0,0,0.55); backdrop-filter:blur(4px);
+    border:1px solid var(--line); border-radius:999px;
+    padding:5px 12px; font-family:'JetBrains Mono',monospace; font-size:10.5px;
+    letter-spacing:0.08em; text-transform:uppercase; color:var(--text);
+  }
+
+  .car-body{ padding:20px 22px 22px; display:flex; flex-direction:column; flex:1; }
+  .car-brand{ font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); margin-bottom:4px; }
+  .car-name{ font-family:'Poppins',sans-serif; font-weight:700; font-size:19px; margin-bottom:14px; }
+
+  .price-row{ display:flex; align-items:baseline; gap:6px; margin-bottom:18px; }
+  .price-row .amount{ font-family:'Poppins',sans-serif; font-weight:800; font-size:22px; color:var(--accent); }
+  .price-row .unit{ font-size:12.5px; color:var(--muted); }
+
+  .spec-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:12px 10px;
+    padding:16px 0; border-top:1px dashed var(--line); border-bottom:1px dashed var(--line);
+    margin-bottom:20px;
+  }
+  .spec-item{ display:flex; flex-direction:column; gap:3px; }
+  .spec-item label{ font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); }
+  .spec-item span{ font-size:13.5px; font-weight:600; }
+
+  .car-actions{ display:flex; gap:10px; margin-top:auto; }
+  .btn{
+    flex:1; text-align:center; padding:11px 14px; border-radius:999px;
+    font-weight:600; font-size:13px; text-decoration:none; cursor:pointer;
+    border:1.5px solid transparent; transition:background .18s ease, border-color .18s ease, color .18s ease;
+  }
+  .btn-primary{ background:var(--accent); color:#0a0a0a; }
+  .btn-primary:hover{ background:#ff5c47; }
+  .btn-ghost{ background:transparent; border-color:var(--line); color:var(--text); }
+  .btn-ghost:hover{ border-color:var(--accent); color:var(--accent); }
+
+  .back-row{ text-align:center; margin-top:48px; }
+  .back-row a{ color:var(--muted); font-size:13.5px; text-decoration:none; }
+  .back-row a:hover{ color:var(--accent); }
+</style>
 </head>
 <body>
 
-    <h1>Recommended Cars</h1>
+<nav class="navbar">
+  <div class="logo">VELTRIX</div>
+  <div class="nav-links">
+    <a href="{% url 'home' %}">Home</a>
+    <a href="{% url 'models' %}">Models</a>
+    <a href="{% url 'compare' %}">Compare</a>
+    <a href="{% url 'about' %}">About</a>
+    <a href="{% url 'contact' %}">Contact</a>
+  </div>
+  <a href="{% url 'logout' %}" class="btn-logout">Logout</a>
+</nav>
 
+<div class="page">
+  <div class="header">
+    <p class="eyebrow">Recommended For You</p>
+    <h1>Cars matched to your preferences.</h1>
+    <p>Matched to your budget, purpose, and fuel preference.</p>
+  </div>
+
+  {% if cars %}
+  <div class="grid">
     {% for car in cars %}
+    <div class="car-card">
+      <div class="car-visual">
+        <span class="fuel-badge">{{ car.fuel_type }}</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 13l1.5-4.5A2 2 0 0 1 6.4 7h11.2a2 2 0 0 1 1.9 1.5L21 13"/><rect x="2" y="13" width="20" height="5" rx="1.5"/><circle cx="6.5" cy="18.5" r="1.5"/><circle cx="17.5" cy="18.5" r="1.5"/></svg>
+      </div>
+      <div class="car-body">
+        <div class="car-brand">{{ car.brand }}</div>
+        <div class="car-name">{{ car.name }}</div>
 
-        <h2>{{ car.name }}</h2>
+        <div class="price-row">
+          <span class="amount">₹{{ car.price }}</span>
+          <span class="unit">Lakhs</span>
+        </div>
 
-        <p><b>Brand:</b> {{ car.brand }}</p>
-        <p><b>Price:</b> ₹{{ car.price }} Lakhs</p>
-        <p><b>Mileage:</b> {{ car.mileage }} km/l</p>
-        <p><b>Fuel Type:</b> {{ car.fuel_type }}</p>
-        <p><b>Purpose:</b> {{ car.purpose }}</p>
-        <p><b>Seating Capacity:</b> {{ car.seating_capacity }}</p>
-        <p><b>Top Speed:</b> {{ car.top_speed }} km/h</p>
+        <div class="spec-grid">
+          <div class="spec-item"><label>Mileage</label><span>{{ car.mileage }} km/l</span></div>
+          <div class="spec-item"><label>Top Speed</label><span>{{ car.top_speed }} km/h</span></div>
+          <div class="spec-item"><label>Seating</label><span>{{ car.seating_capacity }} seats</span></div>
+          <div class="spec-item"><label>Purpose</label><span>{{ car.purpose }}</span></div>
+        </div>
 
-        <hr>
-
-    {% empty %}
-
-        <h2>No Cars Found!</h2>
-
+        <div class="car-actions">
+          <a href="{% url 'book_test_drive' %}" class="btn btn-primary">Book Test Drive</a>
+          <a href="{% url 'compare' %}" class="btn btn-ghost">Compare</a>
+        </div>
+      </div>
+    </div>
     {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    <h3>No matches yet</h3>
+    <p>No cars in our lineup matched that exact budget, purpose, and fuel type combination. Try widening your budget or picking a different fuel type.</p>
+    <a href="{% url 'recommend_car' %}" class="btn btn-primary" style="display:inline-block;">Try again</a>
+  </div>
+  {% endif %}
+
+  <div class="back-row">
+    <a href="{% url 'recommend_car' %}">← Adjust your search</a>
+  </div>
+</div>
 
 </body>
 </html>
