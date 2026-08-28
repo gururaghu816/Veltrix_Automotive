@@ -261,25 +261,31 @@
   const form = budgetDisplay.closest('form');
 
   function parseBudget(text) {
-    if (!text) return null;
-    text = text.trim().toLowerCase();
+  if (!text) return null;
+  text = text.trim().toLowerCase();
 
-    // Extract the number (supports decimals like 1.5)
-    const numberMatch = text.match(/[\d.]+/);
-    if (!numberMatch) return null;
-    const number = parseFloat(numberMatch[0]);
-    if (isNaN(number)) return null;
+  // Extract the number (supports commas like 10,00,000 and decimals like 1.5)
+  const numberMatch = text.match(/[\d,.]+/);
+  if (!numberMatch) return null;
+  const number = parseFloat(numberMatch[0].replace(/,/g, ''));
+  if (isNaN(number)) return null;
 
-    // Detect unit
-    if (text.includes('crore') || text.includes('cr')) {
-      return number * 100; // 1 crore = 100 lakhs
-    }
-    if (text.includes('lakh') || text.includes('l')) {
-      return number; // already in lakhs
-    }
-    // No unit given — assume lakhs by default
-    return number;
+  // Detect unit
+  if (text.includes('crore') || text.includes('cr')) {
+    return number * 100; // 1 crore = 100 lakhs
   }
+  if (text.includes('lakh') || text.includes('l')) {
+    return number; // already in lakhs
+  }
+
+  // No unit given:
+  // Small numbers (like "10" or "25") are assumed to already be in Lakhs.
+  // Large numbers (like "1000000") are assumed to be plain Rupees, so convert down to Lakhs.
+  if (number >= 1000) {
+    return number / 100000;
+  }
+  return number;
+}
 
   form.addEventListener('submit', function(e) {
     const parsed = parseBudget(budgetDisplay.value);
