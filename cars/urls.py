@@ -18,6 +18,8 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
 
     path('cars/', views.get_cars),
+    path('book/<int:car_id>/', views.book_test_drive, name='book_test_drive_car'),
+    path('book/featured/<str:featured_model>/', views.book_test_drive, name='book_featured_model'),
     path('book/', views.book_test_drive, name='book_test_drive'),
     path('success/<int:booking_id>/sign/', views.save_signature, name='save_signature'),
 

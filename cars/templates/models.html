@@ -1,55 +1,271 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Veltrix Models</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=2">
 </head>
 
-<body>
-<header>
-    <h2>VELTRIX</h2>
-    <nav>
+<body class="models-page">
+
+<!-- ================= NAVBAR ================= -->
+
+<header class="models-navbar">
+
+    <a href="/" class="models-logo">
+        <span class="models-logo-box">V</span>
+
+        <span class="models-logo-name">VELTRIX</span>
+    </a>
+
+    <nav class="models-nav">
+
         <a href="/">Home</a>
-        <a href="/models/">Models</a>
+
+        <a href="/models/" class="active">Models</a>
+
         <a href="/compare/">Compare</a>
+
         <a href="/about/">About</a>
+
         <a href="/contact/">Contact</a>
+
     </nav>
+
 </header>
 
-<h1 class="page-title">Our Models</h1>
 
-<div class="cars">
+<!-- ================= HERO ================= -->
 
-    <div class="car-card">
-        <img src="{% static 'images/v8-phantom.jpg' %}">
-        <h3>V8 Phantom</h3>
-        <p>Luxuary</p>
-        <a href="{% url 'v8_phantom' %}" class="btn">View Details</a>
+<section class="models-hero">
+
+    <div class="models-glow"></div>
+
+    <div class="models-hero-content">
+
+        <div class="models-label">
+            <span></span>
+            VELTRIX AUTOMOTIVE
+        </div>
+
+        <h1>
+            Explore the<br>
+            <span>Veltrix lineup.</span>
+        </h1>
+
+        <p>
+            <b>Find the one that moves you.</b>
+        </p>
+
     </div>
 
-    <div class="car-card">
-        <img src="{% static 'images/Porsche.jpg' %}">
-        <h3>Porsche</h3>
-        <p>Luxury SUV</p>
-        <a href="{% url 'x9_dominator' %}" class="btn">View Details</a>
+    <div class="models-section-heading">
+
+        <span>OUR MODELS</span>
+
+        <span class="scroll-text">
+            SCROLL TO EXPLORE ↓
+        </span>
+
     </div>
 
-    <div class="car-card">
-        <img src="{% static 'images/hyundai-verna.jpg' %}">
-        <h3>Hyundai Verna</h3>
-        <p></p>
-        <a href="{% url 'hyundai_verna' %}" class="btn">View Details</a>
+</section>
+
+
+<!-- ================= MODELS ================= -->
+
+<section class="models-collection">
+
+    <div class="models-grid">
+
+
+        <!-- V8 PHANTOM -->
+
+        <article class="premium-car-card">
+
+            <div class="premium-car-image">
+
+                <img
+                    src="{% static 'images/v8-phantom.png' %}"
+                    alt="V8 Phantom"
+                >
+
+                <span class="car-number">01</span>
+
+            </div>
+
+            <div class="premium-car-content">
+
+                <p class="car-series">
+                    VELTRIX SIGNATURE
+                </p>
+
+                <h2>V8 Phantom</h2>
+
+                <p class="car-category">
+                    LUXURY SEDAN
+                </p>
+
+                <p class="car-description">
+                    A luxury sedan with a powerful V8 engine and comfortable interior.
+                </p>
+
+                <a href="{% url 'v8_phantom' %}" class="view-details">
+                    View Details
+                    <span>↗</span>
+                </a>
+
+            </div>
+
+        </article>
+
+
+        <!-- PORSCHE -->
+
+        <article class="premium-car-card">
+
+            <div class="premium-car-image">
+
+                <img
+                    src="{% static 'images/Porsche.jpg' %}"
+                    alt="Porsche"
+                >
+
+                <span class="car-number">02</span>
+
+            </div>
+
+            <div class="premium-car-content">
+
+                <p class="car-series">
+                    PERFORMANCE SERIES
+                </p>
+
+                <h2>Porsche</h2>
+
+                <p class="car-category">
+                    LUXURY COUPE
+                </p>
+
+                <p class="car-description">
+                    A sporty coupe with strong performance and modern design.
+                </p>
+
+                <a href="{% url 'x9_dominator' %}" class="view-details">
+                    View Details
+                    <span>↗</span>
+                </a>
+
+            </div>
+
+        </article>
+
+
+        <!-- HYUNDAI VERNA -->
+
+        <article class="premium-car-card">
+
+            <div class="premium-car-image">
+
+                <img
+                    src="{% static 'images/hyundai-verna.jpg' %}"
+                    alt="Hyundai Verna"
+                >
+
+                <span class="car-number">03</span>
+
+            </div>
+
+            <div class="premium-car-content">
+
+                <p class="car-series">
+                    URBAN COLLECTION
+                </p>
+
+                <h2>Hyundai Verna</h2>
+
+                <p class="car-category">
+                    EXECUTIVE SEDAN
+                </p>
+
+                <p class="car-description">
+                    A stylish sedan with good performance and everyday comfort.
+                </p>
+
+                <a href="{% url 'hyundai_verna' %}" class="view-details">
+                    View Details
+                    <span>↗</span>
+                </a>
+
+            </div>
+
+        </article>
+
+
+        <!-- LAND ROVER DEFENDER -->
+
+        <article class="premium-car-card">
+
+            <div class="premium-car-image">
+
+                <img
+                    src="{% static 'images/land-Rover-Defender.jpg' %}"
+                    alt="Land Rover Defender"
+                >
+
+                <span class="car-number">04</span>
+
+            </div>
+
+            <div class="premium-car-content">
+
+                <p class="car-series">
+                    ADVENTURE SERIES
+                </p>
+
+                <h2>Land Rover Defender</h2>
+
+                <p class="car-category">
+                    LUXURY SUV
+                </p>
+
+                <p class="car-description">
+                    A strong SUV designed for both city driving and off-road use.
+                </p>
+
+                <a href="{% url 'land_rover_defender' %}" class="view-details">
+                    View Details
+                    <span>↗</span>
+                </a>
+
+            </div>
+
+        </article>
+
+
     </div>
-    <div class="car-card">
-        <img src="{% static 'images/land-Rover-Defender.jpg' %}">
-        <h3>Land Rover Defender</h3>
-        <p></p>
-        <a href="{% url 'land_rover_defender' %}" class="btn">View Details</a>
-    </div>
-    
-</div>
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="models-footer">
+
+    <span>
+        © 2026 Veltrix Automotive
+    </span>
+
+    <span>
+        Driven by distinction
+    </span>
+
+</footer>
+
 
 </body>
 </html>

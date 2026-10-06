@@ -45,6 +45,7 @@
 
     </header>
 
+
     <!-- ================= HERO SECTION ================= -->
 
     <section class="hero">
@@ -61,6 +62,7 @@
 
     </section>
 
+
     <!-- ================= FEATURED CARS ================= -->
 
     <section class="featured">
@@ -69,39 +71,63 @@
 
         <div class="cars">
 
+            <!-- V8 PHANTOM -->
+
             <div class="car-card">
 
-                <img src="{% static 'images/v8-phantom.jpg' %}" alt="V8 Phantom">
+                <img
+                    src="{% static 'images/v8-phantom.png' %}?v=2"
+                    alt="V8 Phantom"
+                >
 
                 <h3>V8 Phantom</h3>
 
             </div>
 
+
+            <!-- PORSCHE -->
+
             <div class="car-card">
 
-                <img src="{% static 'images/Porsche.jpg' %}" alt="Porsche">
+                <img
+                    src="{% static 'images/Porsche.jpg' %}"
+                    alt="Porsche"
+                >
 
                 <h3>Porsche</h3>
 
             </div>
 
+
+            <!-- HYUNDAI VERNA -->
+
             <div class="car-card">
 
-                <img src="{% static 'images/hyundai-verna.jpg' %}" alt="Hyundai Verna">
+                <img
+                    src="{% static 'images/hyundai-verna.jpg' %}"
+                    alt="Hyundai Verna"
+                >
 
                 <h3>Hyundai Verna</h3>
 
             </div>
 
+
+            <!-- LAND ROVER DEFENDER -->
+
             <div class="car-card">
 
-                <img src="{% static 'images/land-Rover-Defender.jpg' %}" alt="Land Rover Defender">
+                <img
+                    src="{% static 'images/land-Rover-Defender.jpg' %}"
+                    alt="Land Rover Defender"
+                >
 
                 <h3>Land Rover Defender</h3>
 
             </div>
 
         </div>
+
 
         <center>
 
@@ -113,6 +139,7 @@
 
     </section>
 
+
     <!-- ================= FOOTER ================= -->
 
     <footer>
@@ -120,97 +147,142 @@
         <p>© 2026 Veltrix Automotive. All Rights Reserved.</p>
 
     </footer>
-<!-- ================= BOOK TEST DRIVE POPUP ================= -->
 
-<div id="bookingModal" class="booking-modal">
 
-    <div class="booking-content">
+    <!-- ================= BOOK TEST DRIVE POPUP ================= -->
 
-        <span class="booking-close" onclick="closeBooking()">&times;</span>
+    <div id="bookingModal" class="booking-modal">
 
-        <h2>Book Test Drive</h2>
+        <div class="booking-content">
 
-        <p>Experience your dream car with Veltrix Automotive.</p>
+            <span class="booking-close" onclick="closeBooking()">&times;</span>
 
-        <form method="POST" action="{% url 'book_test_drive' %}">
+            <h2>Book Test Drive</h2>
 
-            {% csrf_token %}
+            <p>Experience your dream car with Veltrix Automotive.</p>
 
-            <div class="booking-field">
-                <label>Name</label>
-                <input type="text" name="name" required>
-            </div>
+            <form method="POST" action="{% url 'book_test_drive' %}">
 
-            <div class="booking-field">
-                <label>Email</label>
-                <input type="email" name="email" required>
-            </div>
+                {% csrf_token %}
 
-            <div class="booking-field">
-                <label>Phone</label>
-                <input type="text" name="phone" required>
-            </div>
+                <div class="booking-field">
 
-            <div class="booking-field">
-                <label>Select Car</label>
+                    <label>Name</label>
 
-                <select name="car" required>
+                    <input
+                        type="text"
+                        name="name"
+                        required
+                    >
 
-                    <option value="">Select a car</option>
+                </div>
 
-                    {% for car in cars %}
 
-                        <option value="{{ car.id }}">
-                            {{ car.name }}
+                <div class="booking-field">
+
+                    <label>Email</label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="booking-field">
+
+                    <label>Phone</label>
+
+                    <input
+                        type="text"
+                        name="phone"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="booking-field">
+
+                    <label>Select Car</label>
+
+                    <select name="car" required>
+
+                        <option value="">
+                            Select a car
                         </option>
 
-                    {% endfor %}
+                        {% for car in cars %}
 
-                </select>
+                            <option value="{{ car.id }}">
+                                {{ car.name }}
+                            </option>
 
-            </div>
+                        {% endfor %}
 
-            <div class="booking-field">
-                <label>Preferred Date</label>
-                <input type="date" name="date" required>
-            </div>
+                    </select>
 
-            <button type="submit" class="booking-submit">
-                Book Test Drive
-            </button>
+                </div>
 
-        </form>
+
+                <div class="booking-field">
+
+                    <label>Preferred Date</label>
+
+                    <input
+                        type="date"
+                        name="date"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="booking-submit"
+                >
+                    Book Test Drive
+                </button>
+
+            </form>
+
+        </div>
 
     </div>
 
-</div>
-<script>
 
-function openBooking(){
+    <script>
 
-    document.getElementById("bookingModal").style.display = "flex";
+        function openBooking(){
 
-}
+            document.getElementById("bookingModal").style.display = "flex";
 
-function closeBooking(){
+        }
 
-    document.getElementById("bookingModal").style.display = "none";
 
-}
+        function closeBooking(){
 
-window.onclick = function(event){
+            document.getElementById("bookingModal").style.display = "none";
 
-    var modal = document.getElementById("bookingModal");
+        }
 
-    if(event.target === modal){
 
-        modal.style.display = "none";
+        window.onclick = function(event){
 
-    }
+            var modal = document.getElementById("bookingModal");
 
-}
+            if(event.target === modal){
 
-</script>
+                modal.style.display = "none";
+
+            }
+
+        }
+
+    </script>
+
 </body>
-
 </html>

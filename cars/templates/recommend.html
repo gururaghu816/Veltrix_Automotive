@@ -1,316 +1,379 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Veltrix AI Recommendation</title>
-    <style>
-        :root {
-            --bg: #06070b;
-            --panel: rgba(255, 255, 255, 0.08);
-            --text: #f6f1e8;
-            --muted: #b7b0a5;
-            --gold: #d4a84a;
-            --gold-strong: #f3c96b;
-            --border: rgba(212, 168, 74, 0.35);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veltrix — Build Your Match</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#030304;
+    --panel:#0a0b0d;
+    --line:rgba(255,255,255,0.08);
+    --text:#f5f6f8;
+    --muted:#80838c;
+    --accent:#2fb8ff;
+    --accent-glow:rgba(47,184,255,0.3);
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:'Inter',sans-serif; min-height:100vh;
+    overflow-x:hidden;
+  }
 
-        * { box-sizing: border-box; }
+  .navbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:22px 48px; background:#000; border-bottom:1px solid var(--line);
+  }
+  .logo{ font-family:'Poppins',sans-serif; font-weight:800; font-size:20px; letter-spacing:0.14em; }
+  .nav-links{ display:flex; gap:34px; }
+  .nav-links a{ color:#ccc; text-decoration:none; font-size:13.5px; }
+  .nav-links a:hover{ color:var(--accent); }
+  @media (max-width:760px){ .nav-links{ display:none; } }
 
-        body {
-            margin: 0;
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-            color: var(--text);
-            background: radial-gradient(circle at top left, rgba(212, 168, 74, 0.22), transparent 28%), linear-gradient(135deg, #050608 0%, #11141b 50%, #08090d 100%);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+  /* ---- Top progress ---- */
+  .progress-track{
+    display:flex; gap:6px; padding:0 48px; margin-top:28px; max-width:620px; margin-left:auto; margin-right:auto;
+  }
+  .progress-seg{
+    flex:1; height:3px; background:var(--line); border-radius:2px; overflow:hidden; position:relative;
+  }
+  .progress-seg::after{
+    content:""; position:absolute; inset:0; width:0%;
+    background:linear-gradient(90deg, var(--accent), #7adfff);
+    transition:width .5s cubic-bezier(.2,.8,.2,1);
+  }
+  .progress-seg.filled::after{ width:100%; }
 
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            background: linear-gradient(120deg, rgba(255,255,255,0.03), transparent 40%, rgba(255,255,255,0.05));
-            pointer-events: none;
-        }
+  /* ---- Stage ---- */
+  .stage{
+    position:relative;
+    min-height:calc(100vh - 150px);
+    display:flex; align-items:center; justify-content:center;
+    padding:40px 24px;
+    overflow:hidden;
+  }
+  .stage::before{
+    content:"";
+    position:absolute; inset:0;
+    background:radial-gradient(ellipse 700px 420px at 50% 20%, var(--accent-glow) 0%, transparent 65%);
+    opacity:0.35; pointer-events:none;
+  }
 
-        .navbar {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 2rem;
-            background: rgba(5, 6, 8, 0.75);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(212, 168, 74, 0.25);
-        }
+  .step{
+    position:absolute;
+    width:100%; max-width:620px;
+    opacity:0; transform:translateX(40px);
+    pointer-events:none;
+    transition:opacity .45s ease, transform .45s ease;
+  }
+  .step.active{
+    opacity:1; transform:translateX(0);
+    pointer-events:auto;
+    position:relative;
+  }
+  .step.exit-left{ transform:translateX(-40px); opacity:0; }
 
-        .logo {
-            font-size: 1.4rem;
-            font-weight: 800;
-            letter-spacing: 0.3rem;
-            color: var(--gold-strong);
-            text-transform: uppercase;
-        }
+  .step-counter{
+    font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:0.22em;
+    text-transform:uppercase; color:var(--accent); margin-bottom:18px; text-align:center;
+  }
+  .step h1{
+    font-family:'Poppins',sans-serif; font-weight:300; font-size:clamp(28px,5vw,46px);
+    text-align:center; margin:0 0 14px; line-height:1.15;
+  }
+  .step h1 b{ font-weight:700; }
+  .step-sub{
+    text-align:center; color:var(--muted); font-size:14.5px; margin:0 0 42px; line-height:1.6;
+  }
 
-        .nav-links { display: flex; gap: 1rem; }
+  /* ---- Budget step ---- */
+  .budget-input-wrap{
+    position:relative; max-width:480px; margin:0 auto 18px;
+  }
+  .budget-input-wrap input{
+    width:100%; background:var(--panel); border:1px solid var(--line); border-radius:14px;
+    padding:22px 24px; color:var(--text); font-family:'Poppins',sans-serif; font-weight:500;
+    font-size:22px; text-align:center; outline:none;
+    transition:border-color .2s ease, box-shadow .2s ease;
+  }
+  .budget-input-wrap input:focus{
+    border-color:var(--accent); box-shadow:0 0 0 4px var(--accent-glow);
+  }
+  .budget-chip{
+    display:flex; justify-content:center; margin-bottom:8px; min-height:30px;
+  }
+  .budget-chip span{
+    font-family:'JetBrains Mono',monospace; font-size:12.5px; padding:6px 16px;
+    border-radius:999px; background:rgba(47,184,255,0.12); border:1px solid rgba(47,184,255,0.35);
+    color:var(--accent); opacity:0; transform:translateY(-4px);
+    transition:opacity .25s ease, transform .25s ease;
+  }
+  .budget-chip span.show{ opacity:1; transform:translateY(0); }
+  .budget-chip span.err{ background:rgba(255,76,76,0.12); border-color:rgba(255,76,76,0.4); color:#ff6b6b; }
 
-        .nav-links a {
-            color: var(--muted);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
+  .quick-picks{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:20px; }
+  .quick-pick{
+    padding:9px 18px; border-radius:999px; border:1px solid var(--line);
+    background:transparent; color:var(--muted); font-size:13px; cursor:pointer;
+    transition:all .18s ease;
+  }
+  .quick-pick:hover{ border-color:var(--accent); color:var(--accent); }
 
-        .nav-links a:hover { color: var(--gold-strong); }
+  /* ---- Choice chips (purpose / fuel) ---- */
+  .choice-grid{
+    display:grid; grid-template-columns:repeat(2, 1fr); gap:14px; max-width:480px; margin:0 auto;
+  }
+  .choice-grid.three{ grid-template-columns:repeat(3, 1fr); }
+  .choice-card{
+    background:var(--panel); border:1px solid var(--line); border-radius:14px;
+    padding:22px 14px; text-align:center; cursor:pointer;
+    transition:border-color .2s ease, transform .18s ease, background .2s ease;
+  }
+  .choice-card:hover{ transform:translateY(-3px); border-color:rgba(47,184,255,0.4); }
+  .choice-card.selected{
+    border-color:var(--accent); background:rgba(47,184,255,0.08);
+    box-shadow:0 0 0 1px var(--accent), 0 10px 26px -10px var(--accent-glow);
+  }
+  .choice-card .ic{ font-size:26px; margin-bottom:10px; display:block; }
+  .choice-card .lbl{ font-size:14px; font-weight:500; }
 
-        .hero {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 3rem 1.25rem 2rem;
-            text-align: center;
-        }
+  /* ---- Nav buttons ---- */
+  .step-actions{
+    display:flex; gap:14px; justify-content:center; margin-top:44px;
+  }
+  .nav-btn{
+    padding:14px 34px; border-radius:999px; font-size:13.5px; font-weight:600;
+    letter-spacing:0.04em; text-transform:uppercase; cursor:pointer; border:none;
+    transition:background .18s ease, transform .12s ease, opacity .18s ease;
+  }
+  .nav-btn.primary{
+    background:linear-gradient(135deg, var(--accent), #7adfff); color:#031018;
+  }
+  .nav-btn.primary:hover{ filter:brightness(1.08); }
+  .nav-btn.primary:disabled{ opacity:0.35; cursor:not-allowed; filter:none; }
+  .nav-btn.ghost{
+    background:transparent; border:1px solid var(--line); color:var(--text);
+  }
+  .nav-btn.ghost:hover{ border-color:var(--text); }
+  .nav-btn:active{ transform:scale(0.97); }
 
-        .hero h1 {
-            font-size: clamp(2rem, 4vw, 2.8rem);
-            margin-bottom: 0.75rem;
-            color: var(--gold-strong);
-            animation: fadeUp 0.8s ease both;
-        }
+  /* ---- Review step ---- */
+  .review-list{ max-width:420px; margin:0 auto 10px; }
+  .review-row{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:16px 0; border-bottom:1px solid var(--line);
+  }
+  .review-row:last-child{ border-bottom:none; }
+  .review-row .rl{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); }
+  .review-row .rv{ font-size:16px; font-weight:600; color:var(--accent); }
 
-        .hero p {
-            max-width: 700px;
-            margin: 0 auto 2rem;
-            color: var(--muted);
-            line-height: 1.7;
-            animation: fadeUp 1s ease both;
-        }
-
-        .card {
-            max-width: 720px;
-            margin: 0 auto 3rem;
-            padding: 2rem;
-            border-radius: 24px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid var(--border);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
-            backdrop-filter: blur(22px);
-            -webkit-backdrop-filter: blur(22px);
-            animation: floatIn 0.9s ease both;
-        }
-
-        .card h2 {
-            margin-top: 0;
-            margin-bottom: 1.5rem;
-            font-size: 1.3rem;
-            color: var(--gold-strong);
-        }
-
-        .form-grid { display: grid; gap: 1rem; }
-
-        .field { display: flex; flex-direction: column; gap: 0.45rem; }
-
-        .field label { font-weight: 600; color: var(--text); }
-
-        .field input,
-        .field select {
-            width: 100%;
-            padding: 0.9rem 1rem;
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.12);
-            background: rgba(255,255,255,0.06);
-            color: var(--text);
-            outline: none;
-            transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .field input:focus,
-        .field select:focus {
-            border-color: var(--gold);
-            box-shadow: 0 0 0 3px rgba(212, 168, 74, 0.18);
-            transform: translateY(-1px);
-        }
-
-        .btn {
-            margin-top: 0.5rem;
-            padding: 0.95rem 1.3rem;
-            border: none;
-            border-radius: 999px;
-            font-size: 1rem;
-            font-weight: 700;
-            color: #1b1408;
-            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-strong) 100%);
-            cursor: pointer;
-            transition: transform 0.25s ease, box-shadow 0.25s ease;
-            box-shadow: 0 12px 28px rgba(212, 168, 74, 0.25);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 16px 35px rgba(212, 168, 74, 0.32);
-        }
-
-        footer {
-            padding: 1.2rem 1rem 2rem;
-            text-align: center;
-            color: var(--muted);
-            border-top: 1px solid rgba(255,255,255,0.08);
-        }
-
-        .socials {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 0.6rem;
-        }
-
-        .socials a {
-            color: var(--text);
-            text-decoration: none;
-            transition: color 0.3s ease, transform 0.3s ease;
-        }
-
-        .socials a:hover {
-            color: var(--gold-strong);
-            transform: translateY(-2px);
-        }
-
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(18px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes floatIn {
-            from { opacity: 0; transform: translateY(24px) scale(0.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        @media (max-width: 720px) {
-            .navbar { padding: 1rem 1rem; flex-direction: column; gap: 0.7rem; }
-            .hero { padding-top: 2rem; }
-            .card { padding: 1.3rem; margin-bottom: 2rem; }
-        }
-    </style>
+  @media (max-width:560px){
+    .choice-grid.three{ grid-template-columns:repeat(2,1fr); }
+  }
+</style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="logo">Veltrix</div>
-        <div class="nav-links">
-            <a href="#">Home</a>
-            <a href="#">Models</a>
-            <a href="#">Contact</a>
-        </div>
-    </nav>
 
-    <section class="hero">
-        <h1>Find Your Perfect Drive</h1>
-        <p>Discover the perfect luxury, family, or performance vehicle with a refined experience  your style and budget.</p>
+<nav class="navbar">
+  <div class="logo">VELTRIX</div>
+  <div class="nav-links">
+    <a href="#">Home</a>
+    <a href="#">Models</a>
+    <a href="#">Contact</a>
+  </div>
+</nav>
 
-        <div class="card">
-            <h2>Tell us what you need</h2>
-            <form method="POST">
-                {% csrf_token %}
+<div class="progress-track">
+  <div class="progress-seg filled" id="seg1"></div>
+  <div class="progress-seg" id="seg2"></div>
+  <div class="progress-seg" id="seg3"></div>
+</div>
 
-                <div class="form-grid">
-                    <div class="field">
-                        <label for="budget_display">Budget</label>
-                        <input type="text" id="budget_display" placeholder="e.g. 20 lakhs or 1.5 crore" autocomplete="off" required>
-                        <input type="hidden" name="budget" id="budget_hidden">
-                        <div class="hint" id="budget_hint"></div>
-                    </div>
+<form method="POST" id="wizardForm">
+  {% csrf_token %}
+  <input type="hidden" name="budget" id="budget_hidden">
+  <input type="hidden" name="purpose" id="purpose_hidden">
+  <input type="hidden" name="fuel_type" id="fuel_hidden">
 
-                    <div class="field">
-                        <label for="purpose">Purpose</label>
-                        <select id="purpose" name="purpose">
-                            <option>Family</option>
-                            <option>Luxury</option>
-                            <option>Sports</option>
-                            <option>Daily Commute</option>
-                        </select>
-                    </div>
+  <div class="stage">
 
-                    <div class="field">
-                        <label for="fuel_type">Fuel Type</label>
-                        <select id="fuel_type" name="fuel_type">
-                            <option>Petrol</option>
-                            <option>Diesel</option>
-                            <option>Electric</option>
-                        </select>
-                    </div>
-                </div>
+    <!-- Step 1: Budget -->
+    <div class="step active" data-step="1">
+      <p class="step-counter">01 / 03</p>
+      <h1>What's your <b>budget?</b></h1>
+      <p class="step-sub">Type it however feels natural — we'll understand it.</p>
 
-                <button class="btn" type="submit">Recommend Cars</button>
-            </form>
-        </div>
-    </section>
+      <div class="budget-chip"><span id="budgetChipText"></span></div>
+      <div class="budget-input-wrap">
+        <input type="text" id="budget_display" placeholder="e.g. 20 lakhs or 1.5 crore" autocomplete="off">
+      </div>
 
-    <footer>
-        <div>Follow Veltrix</div>
-        <div class="socials">
-            <a href="#">Instagram</a>
-            <a href="#">Facebook</a>
-            <a href="#">LinkedIn</a>
-        </div>
-    </footer>
+      <div class="quick-picks">
+        <button type="button" class="quick-pick" data-val="10 lakhs">₹10 Lakhs</button>
+        <button type="button" class="quick-pick" data-val="25 lakhs">₹25 Lakhs</button>
+        <button type="button" class="quick-pick" data-val="50 lakhs">₹50 Lakhs</button>
+        <button type="button" class="quick-pick" data-val="1 crore">₹1 Crore</button>
+      </div>
+
+      <div class="step-actions">
+        <button type="button" class="nav-btn primary" id="toStep2" disabled>Continue</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Purpose -->
+    <div class="step" data-step="2">
+      <p class="step-counter">02 / 03</p>
+      <h1>What's it <b>for?</b></h1>
+      <p class="step-sub">Pick the one that fits your daily life best.</p>
+
+      <div class="choice-grid" id="purposeGrid">
+        <div class="choice-card" data-val="Family"><span class="ic">👨‍👩‍👧</span><span class="lbl">Family</span></div>
+        <div class="choice-card" data-val="Luxury"><span class="ic">💎</span><span class="lbl">Luxury</span></div>
+        <div class="choice-card" data-val="Sports"><span class="ic">🏁</span><span class="lbl">Sports</span></div>
+        <div class="choice-card" data-val="Daily Commute"><span class="ic">🚗</span><span class="lbl">Daily Commute</span></div>
+      </div>
+
+      <div class="step-actions">
+        <button type="button" class="nav-btn ghost" id="toStep1from2">Back</button>
+        <button type="button" class="nav-btn primary" id="toStep3" disabled>Continue</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Fuel -->
+    <div class="step" data-step="3">
+      <p class="step-counter">03 / 03</p>
+      <h1>Pick your <b>fuel type.</b></h1>
+      <p class="step-sub">Last question — then we'll show your matches.</p>
+
+      <div class="choice-grid three" id="fuelGrid">
+        <div class="choice-card" data-val="Petrol"><span class="ic">⛽</span><span class="lbl">Petrol</span></div>
+        <div class="choice-card" data-val="Diesel"><span class="ic">🛢️</span><span class="lbl">Diesel</span></div>
+        <div class="choice-card" data-val="Electric"><span class="ic">⚡</span><span class="lbl">Electric</span></div>
+      </div>
+
+      <div class="review-list" id="reviewList" style="display:none; margin-top:36px;">
+        <div class="review-row"><span class="rl">Budget</span><span class="rv" id="reviewBudget">—</span></div>
+        <div class="review-row"><span class="rl">Purpose</span><span class="rv" id="reviewPurpose">—</span></div>
+        <div class="review-row"><span class="rl">Fuel Type</span><span class="rv" id="reviewFuel">—</span></div>
+      </div>
+
+      <div class="step-actions">
+        <button type="button" class="nav-btn ghost" id="toStep2from3">Back</button>
+        <button type="submit" class="nav-btn primary" id="submitBtn" disabled>Show My Matches</button>
+      </div>
+    </div>
+
+  </div>
+</form>
+
 <script>
+  // ---- Elements ----
+  const steps = document.querySelectorAll('.step');
+  const seg1 = document.getElementById('seg1');
+  const seg2 = document.getElementById('seg2');
+  const seg3 = document.getElementById('seg3');
+
   const budgetDisplay = document.getElementById('budget_display');
   const budgetHidden = document.getElementById('budget_hidden');
-  const budgetHint = document.getElementById('budget_hint');
-  const form = budgetDisplay.closest('form');
+  const budgetChipText = document.getElementById('budgetChipText');
+  const toStep2 = document.getElementById('toStep2');
 
+  const purposeHidden = document.getElementById('purpose_hidden');
+  const fuelHidden = document.getElementById('fuel_hidden');
+
+  let currentStep = 1;
+
+  function goToStep(n){
+    steps.forEach(s => {
+      s.classList.remove('active');
+    });
+    document.querySelector(`.step[data-step="${n}"]`).classList.add('active');
+    currentStep = n;
+
+    seg1.classList.toggle('filled', n >= 1);
+    seg2.classList.toggle('filled', n >= 2);
+    seg3.classList.toggle('filled', n >= 3);
+
+    if(n === 3){ updateReview(); }
+  }
+
+  // ---- Budget parsing (same logic as before) ----
   function parseBudget(text) {
-  if (!text) return null;
-  text = text.trim().toLowerCase();
+    if (!text) return null;
+    text = text.trim().toLowerCase();
+    const numberMatch = text.match(/[\d,.]+/);
+    if (!numberMatch) return null;
+    const number = parseFloat(numberMatch[0].replace(/,/g, ''));
+    if (isNaN(number)) return null;
 
-  // Extract the number (supports commas like 10,00,000 and decimals like 1.5)
-  const numberMatch = text.match(/[\d,.]+/);
-  if (!numberMatch) return null;
-  const number = parseFloat(numberMatch[0].replace(/,/g, ''));
-  if (isNaN(number)) return null;
-
-  // Detect unit
-  if (text.includes('crore') || text.includes('cr')) {
-    return number * 100; // 1 crore = 100 lakhs
-  }
-  if (text.includes('lakh') || text.includes('l')) {
-    return number; // already in lakhs
+    if (text.includes('crore') || text.includes('cr')) return number * 100;
+    if (text.includes('lakh') || text.includes('l')) return number;
+    if (number >= 1000) return number / 100000;
+    return number;
   }
 
-  // No unit given:
-  // Small numbers (like "10" or "25") are assumed to already be in Lakhs.
-  // Large numbers (like "1000000") are assumed to be plain Rupees, so convert down to Lakhs.
-  if (number >= 1000) {
-    return number / 100000;
-  }
-  return number;
-}
-
-  form.addEventListener('submit', function(e) {
-    const parsed = parseBudget(budgetDisplay.value);
-    if (parsed === null || parsed <= 0) {
-      e.preventDefault();
-      budgetHint.textContent = 'Please enter a valid amount, e.g. "20 lakhs" or "1.5 crore"';
-      budgetHint.style.color = '#ff4433';
-      budgetDisplay.focus();
-      return;
-    }
-    budgetHidden.value = parsed;
-  });
-
-  // Live preview as they type, so they can see it's understood correctly
-  budgetDisplay.addEventListener('input', function() {
+  function updateBudgetUI(){
     const parsed = parseBudget(budgetDisplay.value);
     if (parsed !== null && parsed > 0) {
-      budgetHint.textContent = `Understood as ₹${parsed.toLocaleString('en-IN')} Lakhs`;
-      budgetHint.style.color = '';
+      budgetHidden.value = parsed;
+      budgetChipText.textContent = `Understood as ₹${parsed.toLocaleString('en-IN')} Lakhs`;
+      budgetChipText.className = 'show';
+      toStep2.disabled = false;
     } else {
-      budgetHint.textContent = 'Type an amount like "20 lakhs" or "1.5 crore"';
-      budgetHint.style.color = '';
+      budgetHidden.value = '';
+      budgetChipText.textContent = budgetDisplay.value ? 'Not quite — try "20 lakhs" or "1.5 crore"' : '';
+      budgetChipText.className = budgetDisplay.value ? 'show err' : '';
+      toStep2.disabled = true;
     }
-  });
-</script>
-</body>
+  }
+  budgetDisplay.addEventListener('input', updateBudgetUI);
 
+  document.querySelectorAll('.quick-pick').forEach(btn => {
+    btn.addEventListener('click', () => {
+      budgetDisplay.value = btn.dataset.val;
+      updateBudgetUI();
+    });
+  });
+
+  // ---- Choice chips ----
+  function setupChoiceGrid(gridId, hiddenInput, onSelect){
+    const grid = document.getElementById(gridId);
+    grid.querySelectorAll('.choice-card').forEach(card => {
+      card.addEventListener('click', () => {
+        grid.querySelectorAll('.choice-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        hiddenInput.value = card.dataset.val;
+        onSelect();
+      });
+    });
+  }
+
+  setupChoiceGrid('purposeGrid', purposeHidden, () => {
+    document.getElementById('toStep3').disabled = false;
+  });
+
+  setupChoiceGrid('fuelGrid', fuelHidden, () => {
+    document.getElementById('submitBtn').disabled = false;
+    document.getElementById('reviewList').style.display = 'block';
+    updateReview();
+  });
+
+  function updateReview(){
+    document.getElementById('reviewBudget').textContent = budgetHidden.value ? `₹${parseFloat(budgetHidden.value).toLocaleString('en-IN')} Lakhs` : '—';
+    document.getElementById('reviewPurpose').textContent = purposeHidden.value || '—';
+    document.getElementById('reviewFuel').textContent = fuelHidden.value || '—';
+  }
+
+  // ---- Step navigation ----
+  toStep2.addEventListener('click', () => goToStep(2));
+  document.getElementById('toStep1from2').addEventListener('click', () => goToStep(1));
+  document.getElementById('toStep3').addEventListener('click', () => goToStep(3));
+  document.getElementById('toStep2from3').addEventListener('click', () => goToStep(2));
+</script>
+
+</body>
 </html>

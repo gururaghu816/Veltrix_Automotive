@@ -1,65 +1,507 @@
 {% load static %}
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>V8 Phantom | Veltrix</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>V8 Phantom | Veltrix Automotive</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/style.css' %}">
+
 </head>
 
-<body>
 
-<header>
-    <h2>VELTRIX</h2>
-    <nav>
-        <a href="/">Home</a>
-        <a href="/models/">Models</a>
-        <a href="/compare/">Compare</a>
-        <a href="/about/">About</a>
-        <a href="/contact/">Contact</a>
-    </nav>
-</header>
+<body class="v8-page">
 
-<section class="car-detail">
 
-    <h1>V8 Phantom</h1>
+<!-- =========================================================
+     NAVBAR
+========================================================= -->
 
-    <img id="carImage" src="{% static 'images/v8-phantom.jpg' %}">
+<header class="v8-navbar">
 
-    <div class="colors">
-        <button onclick="changeColor('red')">Red</button>
-        <button onclick="changeColor('black')">Black</button>
-        <button onclick="changeColor('silver')">Silver</button>
+    <div class="v8-navbar-inner">
+
+        <a href="/" class="v8-logo">
+
+            <span class="v8-logo-box">
+                V
+            </span>
+
+            <span class="v8-logo-text">
+                VELTRIX
+            </span>
+
+            <span class="v8-logo-subtext">
+                AUTOMOTIVE
+            </span>
+
+        </a>
+
+
+        <nav class="v8-nav">
+
+            <a href="/">
+                Home
+            </a>
+
+            <a href="/models/" class="active">
+                Models
+            </a>
+
+            <a href="/compare/">
+                Compare
+            </a>
+
+            <a href="/about/">
+                About
+            </a>
+
+            <a href="/contact/">
+                Contact
+            </a>
+
+        </nav>
+
     </div>
 
-    <h2>Specifications</h2>
+</header>
 
-    <ul>
-        <li>Engine: 4.0L Twin Turbo V8</li>
-        <li>Top Speed: 320 km/h</li>
-        <li>0-100 km/h: 3.5 sec</li>
-        <li>Horsepower: 650 HP</li>
-    </ul>
 
-    <button onclick="openModal()" class="btn">Book Test Drive</button>
+<!-- =========================================================
+     HERO SECTION
+========================================================= -->
+
+<section class="v8-hero">
+
+    <div class="v8-hero-glow"></div>
+
+    <div class="v8-hero-container">
+
+
+        <!-- LEFT SIDE -->
+
+        <div class="v8-hero-content">
+
+            <div class="v8-small-heading">
+
+                <span></span>
+
+                VELTRIX AUTOMOTIVE
+
+            </div>
+
+
+            <p class="v8-collection">
+                SIGNATURE COLLECTION / 01
+            </p>
+
+
+            <h1>
+
+                V8
+
+                <span>
+                    Phantom
+                </span>
+
+            </h1>
+
+
+            <p class="v8-description">
+
+                Luxury performance with a powerful
+                V8 engine.
+
+            </p>
+
+
+            <div class="v8-hero-buttons">
+
+                <a
+                    href="{% url 'book_featured_model' 'V8 Phantom' %}"
+                    class="v8-primary-button"
+                >
+
+                    BOOK A TEST DRIVE
+
+                    <span>
+                    </span>
+
+                </a>
+
+
+                <span class="v8-model-info">
+                    V8 PERFORMANCE
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT SIDE CAR -->
+
+        <div class="v8-image-container">
+
+
+            <div class="v8-image-top">
+
+                <span>
+                    V8 PHANTOM
+                </span>
+
+                <span>
+                    01 / 04
+                </span>
+
+            </div>
+
+
+            <div class="v8-car-image">
+
+                <img
+                    src="{% static 'images/v8-phantom.png' %}"
+                    alt="V8 Phantom"
+                >
+
+            </div>
+
+
+            <div class="v8-image-bottom">
+
+                <span>
+                    VELTRIX AUTOMOTIVE
+                </span>
+
+                <span>
+                    V8 PHANTOM
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </section>
 
-<!-- Modal -->
-<div id="modal" class="modal">
-    <div class="modal-content">
-        <span onclick="closeModal()" class="close">&times;</span>
 
-        <h2>Book Test Drive</h2>
-        <form>
-            <input type="text" placeholder="Name">
-            <input type="email" placeholder="Email">
-            <input type="tel" placeholder="Phone">
-            <button class="btn">Submit</button>
-        </form>
+<!-- =========================================================
+     PERFORMANCE
+========================================================= -->
+
+<section class="v8-specifications">
+
+    <div class="v8-section-container">
+
+
+        <div class="v8-section-heading">
+
+            <div class="v8-heading-left">
+
+                <span class="v8-heading-line"></span>
+
+                <p>
+                    01 / PERFORMANCE
+                </p>
+
+            </div>
+
+            <span>
+                CORE SPECIFICATIONS
+            </span>
+
+        </div>
+
+
+        <div class="v8-spec-grid">
+
+
+            <div class="v8-spec-card">
+
+                <span>
+                    ENGINE
+                </span>
+
+                <strong>
+                    4.0L Twin Turbo V8
+                </strong>
+
+            </div>
+
+
+            <div class="v8-spec-card">
+
+                <span>
+                    TOP SPEED
+                </span>
+
+                <strong>
+                    320 km/h
+                </strong>
+
+            </div>
+
+
+            <div class="v8-spec-card">
+
+                <span>
+                    0–100 KM/H
+                </span>
+
+                <strong>
+                    3.5 sec
+                </strong>
+
+            </div>
+
+
+            <div class="v8-spec-card">
+
+                <span>
+                    HORSEPOWER
+                </span>
+
+                <strong>
+                    650 HP
+                </strong>
+
+            </div>
+
+        </div>
+
     </div>
-</div>
 
-<script src="{% static 'js/script.js' %}"></script>
+</section>
+
+
+<!-- =========================================================
+     COLORS
+========================================================= -->
+
+<section class="v8-colors">
+
+    <div class="v8-section-container">
+
+        <div class="v8-colors-layout">
+
+
+            <div class="v8-colors-heading">
+
+                <div class="v8-heading-left">
+
+                    <span class="v8-heading-line"></span>
+
+                    <p>
+                        02 / FINISH
+                    </p>
+
+                </div>
+
+
+                <h2>
+                    Make it yours.
+                </h2>
+
+
+                <span>
+                    Choose your preferred exterior color.
+                </span>
+
+            </div>
+
+
+            <div class="v8-color-options">
+
+
+                <button
+                    type="button"
+                    class="v8-color-option active"
+                    data-color="Obsidian Black"
+                >
+
+                    <span class="v8-color-circle black"></span>
+
+                    <span>
+                        Obsidian Black
+                    </span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="v8-color-option"
+                    data-color="Crimson Red"
+                >
+
+                    <span class="v8-color-circle red"></span>
+
+                    <span>
+                        Crimson Red
+                    </span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="v8-color-option"
+                    data-color="Silver Frost"
+                >
+
+                    <span class="v8-color-circle silver"></span>
+
+                    <span>
+                        Silver Frost
+                    </span>
+
+                </button>
+
+
+                <p class="v8-selected-color">
+
+                    Selected finish:
+
+                    <strong id="selectedColor">
+                        Obsidian Black
+                    </strong>
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     EXPERIENCE
+========================================================= -->
+
+<section class="v8-experience">
+
+    <div class="v8-experience-container">
+
+
+        <div class="v8-experience-content">
+
+            <div class="v8-experience-label">
+
+                <span class="v8-heading-line"></span>
+
+                <p>
+                    03 / EXPERIENCE
+                </p>
+
+            </div>
+
+
+            <h2>
+
+                Experience the
+                <br>
+
+                <span>
+                    V8 Phantom.
+                </span>
+
+            </h2>
+
+
+            <p>
+
+                Book a test drive and experience
+                the car for yourself.
+
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer class="v8-footer">
+
+    <a
+        href="/models/"
+        class="v8-back-models"
+    >
+
+        ← Back to Models
+
+    </a>
+
+
+    <span>
+        © 2026 Veltrix Automotive
+    </span>
+
+
+    <span>
+        VELTRIX AUTOMOTIVE
+    </span>
+
+</footer>
+
+
+<!-- =========================================================
+     COLOR SELECTION JAVASCRIPT
+========================================================= -->
+
+<script>
+
+    const colorOptions =
+        document.querySelectorAll(".v8-color-option");
+
+
+    const selectedColor =
+        document.getElementById("selectedColor");
+
+
+    colorOptions.forEach(function(option) {
+
+        option.addEventListener("click", function() {
+
+
+            colorOptions.forEach(function(item) {
+
+                item.classList.remove("active");
+
+            });
+
+
+            this.classList.add("active");
+
+
+            selectedColor.textContent =
+                this.getAttribute("data-color");
+
+        });
+
+    });
+
+</script>
+
 
 </body>
+
 </html>

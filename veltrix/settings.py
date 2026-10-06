@@ -78,7 +78,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'veltrix_db',
         'USER': 'postgres',
-        'PASSWORD': 'admin123',
+        'PASSWORD': 'veltrix@12345',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -127,3 +127,12 @@ import os
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'cars/static')
 ]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+
+
+
+
+
